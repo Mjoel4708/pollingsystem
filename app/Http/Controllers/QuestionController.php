@@ -23,24 +23,28 @@ class QuestionController extends Controller
 
     public function store(CreateQuestionRequest $request, $pollId)
     {
+        
         // Store a new question for the specific poll
-        $this->questionService->createQuestion($request->validated(), $pollId);
-
-        return redirect()->route('polls.show', $pollId)->with('success', 'Question created successfully.');
+        $question = $this->questionService->createQuestion($request->validated(), $pollId);
+        // get question with choices
+        $question = $this->questionService->getQuestionWithChoices($question->id);
+        return redirect()->route('questions.index', compact($question))->with('success', 'Question created successfully.');
     }
 
     public function edit($pollId, $questionId)
     {
+        
         $question = $this->questionService->getQuestionById($questionId);
         return view('questions.edit', compact('pollId', 'question'));
     }
 
     public function update(UpdateQuestionRequest $request, $pollId, $questionId)
     {
+        
         $question = $this->questionService->getQuestionById($questionId);
         $this->questionService->updateQuestion($question, $request->validated());
 
-        return redirect()->route('polls.show', $pollId)->with('success', 'Question updated successfully.');
+        return redirect()->route('polls.show', compact($pollId))->with('success', 'Question updated successfully.');
     }
 
     public function destroy($pollId, $questionId)
@@ -48,12 +52,12 @@ class QuestionController extends Controller
         $question = $this->questionService->getQuestionById($questionId);
         $this->questionService->deleteQuestion($question);
 
-        return redirect()->route('polls.show', $pollId)->with('success', 'Question deleted successfully.');
+        return redirect()->route('polls.show', compact($pollId))->with('success', 'Question deleted successfully.');
     }
 
-    public function show($pollId, $questionId)
+    public function show($pollId)
     {
-        $question = $this->questionService->getQuestionWithChoices($questionId);
+        $questions = $this->questionService->getQuestionsByPoll($pollId);
         return view('questions.show', compact('pollId', 'question'));
     }
 

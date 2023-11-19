@@ -31,6 +31,11 @@ class PollService
 
     }
 
+    public function getPollWithQuestions($pollId): Poll
+    {
+        return PollRepository::getPollWithQuestions($pollId);
+    }
+
     public function updatePoll(Poll $poll, array $data): Poll
     {
         // Validate that a poll with the same title doesn't exist

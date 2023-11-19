@@ -41,4 +41,9 @@ class PollRepository
     {
         return Poll::where('user_id', $userId)->get();
     }
+
+    public function getPollWithQuestions($pollId)
+    {
+        return Poll::with('questions')->findOrFail($pollId);
+    }
 }

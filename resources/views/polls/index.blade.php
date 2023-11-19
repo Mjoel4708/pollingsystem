@@ -2,16 +2,25 @@
 
 @section('content')
     <div class="container">
-        <h2>Polls</h2>
-        <!-- Display a list of polls here -->
-        @foreach ($polls as $poll)
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $poll->title }}</h5>
-                    <p class="card-text">{{ $poll->description }}</p>
-                    <a href="{{ route('polls.show', $poll->slug) }}" class="btn btn-primary">View Poll</a>
-                </div>
-            </div>
-        @endforeach
+        <h2>Poll: {{ $poll->title }}</h2>
+
+        <!-- Show options only to the owner -->
+        @if (auth()->check() && $poll->user_id === auth()->user()->id)
+            <a href="{{ route('questions.create', ['pollId' => $poll->id]) }}">
+                Create a Question
+            </a>
+            <a href="{{ route('polls.edit', ['pollId' => $poll->id]) }}">
+                Update
+            </a>
+            <a href="{{ route('polls.delete', ['pollId' => $poll->id]) }}">
+                Delete
+            </a>
+        @endif
+
+        <!-- Display poll details -->
+        <p>{{ $poll->description }}</p>
+
+        <!-- Display questions related to the poll -->
+        @include('questions.index')
     </div>
 @endsection

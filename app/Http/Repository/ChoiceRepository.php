@@ -25,4 +25,9 @@ class ChoiceRepository
     {
         return Choice::where('question_id', $questionId)->get();
     }
+
+    public function showChoicesWithVotes($questionId)
+    {
+        return Choice::with('votes')->where('question_id', $questionId)->get();
+    }
 }

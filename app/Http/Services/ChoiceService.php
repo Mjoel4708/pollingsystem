@@ -34,5 +34,8 @@ class ChoiceService
         return $this->choiceRepository->getChoicesByQuestion($questionId);
     }
 
-    // Add other methods as needed
+    public function showChoicesWithVotes($questionId)
+    {
+        return $this->choiceRepository->showChoicesWithVotes($questionId);
+    }
 }

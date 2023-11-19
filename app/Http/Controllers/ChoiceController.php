@@ -17,6 +17,7 @@ class ChoiceController extends Controller
 
     public function edit($pollId, $questionId, $choiceId)
     {
+        // authorize the user to update the choice
         $choice = $this->choiceService->getChoiceById($choiceId);
         return view('choices.edit', compact('pollId', 'questionId', 'choice'));
     }
@@ -39,14 +40,14 @@ class ChoiceController extends Controller
 
     public function show($pollId, $questionId, $choiceId)
     {
-        $choice = $this->choiceService->getChoiceById($choiceId);
-        return view('choices.show', compact('pollId', 'questionId', 'choice'));
+        $choices = $this->choiceService->showChoicesWithVotes($questionId);
+        return view('choices.show', compact('pollId', 'questionId', 'choices'));
     }
 
     public function showWithVotes($pollId, $questionId, $choiceId)
     {
-        $choice = $this->choiceService->getChoiceWithVotes($choiceId);
-        return view('choices.show_with_votes', compact('pollId', 'questionId', 'choice'));
+        $choices = $this->choiceService->showChoicesWithVotes($questionId);
+        return view('choices.show_with_votes', compact('pollId', 'questionId', 'choices'));
     }
 
     public function showVotes($pollId, $questionId, $choiceId)
